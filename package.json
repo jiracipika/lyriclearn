@@ -1,0 +1,10 @@
+{
+  "name": "lyriclearn",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "cd apps/web && next dev",
+    "build": "cd apps/web && next build",
+    "start": "cd apps/web && next start"
+  }
+}
