@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ios-bg: #F2F2F7;
+  --ios-bg2: #FFFFFF;
+  --ios-label: #000000;
+  --ios-label2: #3C3C43;
+  --ios-label3: #8E8E93;
+  --ios-label4: #C7C7CC;
+  --ios-sep: rgba(60,60,67,0.12);
+  --ios-blue: #007AFF;
+  --ios-green: #34C759;
+  --ios-orange: #FF9500;
+  --ios-red: #FF3B30;
+  --ios-purple: #AF52DE;
+  --ios-fill: rgba(120,120,128,0.12);
+  --ios-fill2: rgba(120,120,128,0.08);
+  --ios-radius: 12px;
+  --ios-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif; background: var(--ios-bg); color: var(--ios-label); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
