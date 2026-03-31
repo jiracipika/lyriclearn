@@ -1,4 +1,0 @@
-{
-  "buildCommand": "cd apps/web && next build",
-  "outputDirectory": "apps/web/.next"
-}
