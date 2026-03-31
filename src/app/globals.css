@@ -5,7 +5,7 @@
 :root {
   --ios-bg: #F2F2F7;
   --ios-bg2: #FFFFFF;
-  --ios-label: #000000;
+  --ios-label: #1C1C1E;
   --ios-label2: #3C3C43;
   --ios-label3: #8E8E93;
   --ios-label4: #C7C7CC;
@@ -15,12 +15,64 @@
   --ios-orange: #FF9500;
   --ios-red: #FF3B30;
   --ios-purple: #AF52DE;
+  --ios-pink: #FF2D55;
   --ios-fill: rgba(120,120,128,0.12);
   --ios-fill2: rgba(120,120,128,0.08);
-  --ios-radius: 12px;
-  --ios-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --ios-radius: 16px;
+  --ios-radius-sm: 12px;
+  --ios-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
+  --ios-shadow-hover: 0 4px 16px rgba(0,0,0,0.10);
+  --ios-glass-bg: rgba(255,255,255,0.72);
+  --ios-glass-border: rgba(255,255,255,0.18);
+  --ios-gradient-accent: linear-gradient(135deg, #FF2D55, #AF52DE);
+  --ios-transition: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif; background: var(--ios-bg); color: var(--ios-label); -webkit-font-smoothing: antialiased; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif;
+  background: var(--ios-bg);
+  color: var(--ios-label);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.47;
+  letter-spacing: -0.022em;
+}
 a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
+/* Smooth transitions */
+a, button, input, select {
+  transition: all var(--ios-transition);
+}
+a:hover { opacity: 0.85; }
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--ios-blue);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Card hover lift */
+.ios-card {
+  transition: transform var(--ios-transition), box-shadow var(--ios-transition);
+}
+.ios-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ios-shadow-hover);
+}
+
+/* Frosted glass */
+.ios-glass {
+  background: var(--ios-glass-bg);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--ios-glass-border);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ios-label4); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ios-label3); }
