@@ -1,4 +1,3 @@
-'use client';
 import Link from 'next/link';
 
 const FEATURES = [
@@ -22,7 +21,7 @@ export default function Landing() {
         <h1 style={{ fontSize: 36, fontWeight: 700, color: '#fff', letterSpacing: '-1px', position: 'relative', marginBottom: 8 }}>
           Lyriclearn
         </h1>
-        <p style={{ fontSize: 16, color: '#fff99', position: 'relative', maxWidth: 400, margin: '0 auto 28px', lineHeight: 1.5 }}>
+        <p style={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.9)', position: 'relative', maxWidth: 400, margin: '0 auto 28px', lineHeight: 1.5 }}>
           Learn languages through lyrics
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', position: 'relative' }}>
@@ -41,7 +40,7 @@ export default function Landing() {
         <h2 style={{ fontSize: 22, fontWeight: 700, letterSpacing: '-0.4px', marginBottom: 20, color: 'var(--ios-label)' }}>Features</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 12 }}>
           {FEATURES.map(f => (
-            <Link key={f.href} href={f.href} style={{
+            <Link key={f.label} href={f.href} style={{
               padding: 20, borderRadius: 16, background: 'var(--ios-bg2)',
               boxShadow: 'var(--ios-shadow)',
               textDecoration: 'none', transition: 'transform 0.2s ease',
