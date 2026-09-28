@@ -1,5 +1,8 @@
 'use client';
 import Link from 'next/link';
+import { placeholderVocabCards } from '@/lib/vocabulary';
+
+const CARDS = placeholderVocabCards();
 
 export default function VocabularyPage() {
   return (
@@ -12,18 +15,18 @@ export default function VocabularyPage() {
         </p>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 12 }}>
-          {[1,2,3,4,5,6].map(i => (
-            <div key={i} style={{
+          {CARDS.map(card => (
+            <div key={card.id} style={{
               borderRadius: 16, overflow: 'hidden', background: 'var(--ios-bg2)',
               boxShadow: 'var(--ios-shadow)',
             }}>
-              <div style={{ height: 120, background: 'linear-gradient(135deg, hsl(' + (i * 51) + ', 40%, 85%) 0%, hsl(' + ((i * 51) + 30) + ', 45%, 80%) 100%)' }} />
+              <div style={{ height: 120, background: card.gradient }} />
               <div style={{ padding: 14 }}>
                 <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--ios-label)', marginBottom: 4 }}>
-                  Vocabulary Item {i}
+                  {card.title}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--ios-label3)' }}>
-                  Added {i}d ago
+                  {card.subtitle}
                 </div>
               </div>
             </div>
