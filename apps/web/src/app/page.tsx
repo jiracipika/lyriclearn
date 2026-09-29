@@ -1,25 +1,30 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
+export const metadata: Metadata = {
+  title: 'Learn languages through lyrics',
+};
+
 const FEATURES = [
-  { label: 'Song Library', href: '/songs', icon: '✨', desc: 'Song Library feature coming soon' },
-  { label: 'Song Detail', href: '/songs', icon: '✨', desc: 'Song Detail feature coming soon' },
-  { label: 'Learn Mode', href: '/songs', icon: '✨', desc: 'Learn Mode feature coming soon' },
-  { label: 'My Progress', href: '/progress', icon: '✨', desc: 'My Progress feature coming soon' }
+  { label: 'Song Library', href: '/songs', icon: '✨', desc: 'Browse the catalog and pick a song to learn' },
+  { label: 'Song Detail', href: '/songs', icon: '✨', desc: 'Lyrics, artist, and language at a glance' },
+  { label: 'Learn Mode', href: '/songs', icon: '✨', desc: 'Type each line from memory — hints and scoring included' },
+  { label: 'My Progress', href: '/progress', icon: '✨', desc: 'Lines mastered and words learned, song by song' }
 ];
 
 export default function Landing() {
   return (
-    <div style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
+    <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
       <div style={{
         background: 'linear-gradient(135deg, #FF2D55 0%, #AF52DE 100%)',
         padding: '100px 24px 60px',
         textAlign: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%)' }} />
-        <div style={{ fontSize: 56, marginBottom: 16, position: 'relative' }}>🎵</div>
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 60%)' }} />
+        <div aria-hidden="true" style={{ fontSize: 56, marginBottom: 16, position: 'relative' }}>🎵</div>
         <h1 style={{ fontSize: 36, fontWeight: 700, color: '#fff', letterSpacing: '-1px', position: 'relative', marginBottom: 8 }}>
-          Lyriclearn
+          LyricLearn
         </h1>
         <p style={{ fontSize: 16, color: 'rgba(255, 255, 255, 0.9)', position: 'relative', maxWidth: 400, margin: '0 auto 28px', lineHeight: 1.5 }}>
           Learn languages through lyrics
@@ -45,13 +50,13 @@ export default function Landing() {
               boxShadow: 'var(--ios-shadow)',
               textDecoration: 'none', transition: 'transform 0.2s ease',
             }}>
-              <div style={{ fontSize: 28, marginBottom: 8 }}>{f.icon}</div>
+              <div aria-hidden="true" style={{ fontSize: 28, marginBottom: 8 }}>{f.icon}</div>
               <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ios-label)', marginBottom: 4 }}>{f.label}</div>
               <div style={{ fontSize: 13, color: 'var(--ios-label3)', lineHeight: 1.4 }}>{f.desc}</div>
             </Link>
           ))}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

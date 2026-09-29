@@ -44,15 +44,15 @@ export default function LearnModePage() {
 
   if (!song) {
     return (
-      <div style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
+      <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
         <div style={{ maxWidth: 680, margin: '0 auto', padding: '60px 16px 40px' }}>
-          <Link href="/songs" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← All Songs</Link>
+          <Link href="/songs" aria-label="Back to all songs" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← All Songs</Link>
           <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--ios-label)', marginBottom: 8 }}>Song Not Found</h1>
           <p style={{ fontSize: 15, color: 'var(--ios-label3)' }}>
             No song matches this link. Pick one from the library to start learning.
           </p>
         </div>
-      </div>
+      </main>
     );
   }
 
@@ -109,9 +109,9 @@ export default function LearnModePage() {
   };
 
   return (
-    <div style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
+    <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '60px 16px 40px' }}>
-        <Link href={`/songs/${song.id}`} style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← {song.title}</Link>
+        <Link href={`/songs/${song.id}`} aria-label={`Back to ${song.title}`} style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← {song.title}</Link>
         <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--ios-label)', marginBottom: 4 }}>Learn Mode</h1>
         <p style={{ fontSize: 15, color: 'var(--ios-label3)', marginBottom: 24 }}>
           {song.title} — {song.artist} · {song.language.toUpperCase()}
@@ -119,7 +119,7 @@ export default function LearnModePage() {
         </p>
 
         {done ? (
-          <div style={{
+          <div aria-live="polite" style={{
             borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
             padding: 24, textAlign: 'center',
           }}>
@@ -141,7 +141,7 @@ export default function LearnModePage() {
             borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
             padding: 20,
           }}>
-            <div style={{ fontSize: 12, color: 'var(--ios-label3)', marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
+            <div aria-live="polite" style={{ fontSize: 12, color: 'var(--ios-label3)', marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
               <span>Line {session.currentLine + 1} of {session.totalLines}</span>
               <span>Score {score}%</span>
             </div>
@@ -181,7 +181,7 @@ export default function LearnModePage() {
               }}>
                 Reveal &amp; Skip
               </button>
-              <button onClick={toggleMode} style={{
+              <button onClick={toggleMode} aria-pressed={mode === 'first-letters'} style={{
                 background: 'transparent', color: 'var(--ios-label3)', border: '1px solid var(--ios-label3)',
                 borderRadius: 12, padding: '8px 16px', fontSize: 15, cursor: 'pointer',
               }}>
@@ -189,16 +189,16 @@ export default function LearnModePage() {
               </button>
             </div>
             {feedback === 'correct' && (
-              <div style={{ fontSize: 14, color: 'var(--ios-blue)', marginTop: 12 }}>Correct — next line!</div>
+              <div aria-live="polite" style={{ fontSize: 14, color: 'var(--ios-blue)', marginTop: 12 }}>Correct — next line!</div>
             )}
             {feedback === 'wrong' && (
-              <div style={{ fontSize: 14, color: 'var(--ios-red)', marginTop: 12 }}>
+              <div aria-live="polite" style={{ fontSize: 14, color: 'var(--ios-red)', marginTop: 12 }}>
                 Not quite — try again{hintVisible ? '' : ` (hint after ${HINT_AFTER_FAILED_ATTEMPTS - session.attempts} more miss${HINT_AFTER_FAILED_ATTEMPTS - session.attempts === 1 ? '' : 'es'})`}
               </div>
             )}
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }

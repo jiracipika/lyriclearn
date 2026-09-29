@@ -2,7 +2,10 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'LyricLearn',
+  title: {
+    default: 'LyricLearn',
+    template: '%s · LyricLearn',
+  },
   description: 'Tap any word in a song lyric for instant translation and pronunciation. Sing along, absorb grammar naturally, make vocabulary stick through music.',
 };
 

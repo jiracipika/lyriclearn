@@ -26,7 +26,7 @@ function formatLastPracticed(timestamp: number): string {
 function SongRow({ progress, title, artist }: { progress: SongProgress; title: string; artist: string }) {
   const tier = TIER_STYLE[progress.tier];
   return (
-    <Link href={`/songs/${progress.songId}/learn`} style={{ textDecoration: 'none' }}>
+    <Link href={`/songs/${progress.songId}/learn`} aria-label={`Practice ${title} in Learn Mode`} style={{ textDecoration: 'none' }}>
       <div style={{
         borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
         padding: 16, marginBottom: 12,
@@ -50,6 +50,7 @@ function SongRow({ progress, title, artist }: { progress: SongProgress; title: s
           aria-valuemin={0}
           aria-valuemax={100}
           aria-valuenow={progress.pct}
+          aria-valuetext={`${progress.pct}% — ${tier.label}`}
           aria-label={`${title} progress`}
           style={{ height: 6, borderRadius: 3, background: 'var(--ios-fill)', overflow: 'hidden' }}
         >
@@ -75,9 +76,9 @@ export default function MyProgressPage() {
   const hasActivity = aggregate.songsStarted > 0 || aggregate.vocabulary.total > 0;
 
   return (
-    <div style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
+    <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
       <div style={{ maxWidth: 680, margin: '0 auto', padding: '60px 16px 40px' }}>
-        <Link href="/" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← Back</Link>
+        <Link href="/" aria-label="Back to home" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← Back</Link>
         <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--ios-label)', marginBottom: 8 }}>My Progress</h1>
         <p style={{ fontSize: 15, color: 'var(--ios-label3)', marginBottom: 24 }}>
           Your lyrics and vocabulary at a glance.
@@ -137,6 +138,6 @@ export default function MyProgressPage() {
           </>
         )}
       </div>
-    </div>
+    </main>
   );
 }

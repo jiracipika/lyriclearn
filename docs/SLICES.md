@@ -45,7 +45,25 @@ progress page is now real: aggregate header, per-song rows with progress
 bars and last-practiced dates (links into the learn flow), and an empty
 state when nothing is stored yet.
 
-## S5 — polish
+## S5 — polish (shipped 2026-09-29)
 Copy pass + a11y labels on the extracted surfaces.
+"Coming soon" stub copy removed everywhere it survived (landing feature
+grid, songs list, song detail, vocabulary) and replaced with copy that
+describes the real surfaces; brand casing unified to "LyricLearn"
+(landing h1); landing gained its own metadata title, with a title
+template in layout.tsx. A11y: every page renders its content inside a
+<main> landmark; decorative gradients and emoji are aria-hidden; back
+links carry specific aria-labels ("Back to home", "Back to <song>");
+the learn page announces line/score changes and check feedback via
+aria-live="polite" (completion card included) and the cue-mode toggle
+exposes aria-pressed; progress bars gained aria-valuetext (percent +
+tier) and per-song rows concise link names. Flagged, deliberately not
+changed: --ios-label3 (#8E8E93) on --ios-bg2 is ~3.3:1 — passes only for
+large text, so the 12-15px secondary copy is an AA contrast miss that
+needs a token decision; the learn guess input sets outline:'none' with
+no replacement focus indicator; songs/[id] and vocab still render the
+placeholder card grids from lib (retiring placeholderSongCards/
+placeholderVocabCards is a data-layer slice, not polish). Campaign
+plan complete: S1-S5 shipped.
 
 Rules: tests green before every commit; pull --rebase; never force-push.
