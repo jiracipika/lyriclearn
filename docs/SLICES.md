@@ -30,8 +30,20 @@ real minimal session (cue, guess input, hint after 2 misses,
 tap-to-reveal fallback, running score, completion screen) persisting
 mastered lines via songs-storage.
 
-## S4 — progress stats
+## S4 — progress stats (shipped 2026-09-29)
 Per-song + aggregate progress (lib/progress.ts) with tests.
+songProgress maps a SongState onto pinned mastery tiers over learned-line
+percentage — 'new' (0) / 'started' (>0, <50%) / 'partial' (>=50%, <100%) /
+'mastered' (100%) — counts only indices that exist in the song's lyrics
+(stale persisted indices are ignored), passes `updatedAt` through as a
+nullable lastPracticed (0 = never practiced), and never reads the clock.
+aggregateProgress sums across the catalog (songsStarted/songsMastered/
+totalLinesLearned/overallPct, rounded like every other percentage here);
+vocabulary stays a sibling field composed verbatim from computeProgress —
+lyrics and vocabulary are reported side by side, never force-merged. The
+progress page is now real: aggregate header, per-song rows with progress
+bars and last-practiced dates (links into the learn flow), and an empty
+state when nothing is stored yet.
 
 ## S5 — polish
 Copy pass + a11y labels on the extracted surfaces.
