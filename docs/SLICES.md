@@ -15,9 +15,20 @@ quality-gate CI workflow exists and must stay green.
 Types + storage for songs/lyrics (lib/songs.ts) with tests; pages
 consume the module.
 
-## S3 — learn-flow scoring
+## S3 — learn-flow scoring (shipped 2026-09-29)
 Line-reveal/progress/scoring logic extracted from the learn flow into
 pure solvers + tests (mirrors the avatar-engine pattern).
+Shipped as lib/learn.ts: deterministic length-preserving line masking
+(full / first-letters / hidden), pinned guess normalization (NFC,
+lowercase, typographic apostrophes folded, punctuation becomes word
+separators, accents never transliterated), session progression with
+first-try credit (1.0 first try / 0.5 otherwise, rounded 0-100) and
+mastery mapping into SongState (applyMastery). The plan's "extract from
+the learn flow" assumption was off — the page was a placeholder card
+grid — so the engine was authored fresh and the learn page now runs a
+real minimal session (cue, guess input, hint after 2 misses,
+tap-to-reveal fallback, running score, completion screen) persisting
+mastered lines via songs-storage.
 
 ## S4 — progress stats
 Per-song + aggregate progress (lib/progress.ts) with tests.
