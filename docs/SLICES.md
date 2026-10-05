@@ -66,4 +66,26 @@ placeholder card grids from lib (retiring placeholderSongCards/
 placeholderVocabCards is a data-layer slice, not polish). Campaign
 plan complete: S1-S5 shipped.
 
+## S6 — final data wiring (shipped 2026-10-05)
+The last two placeholder pages are real. songs/[id] renders the actual
+song from getSongById — title/artist/language/difficulty and the full
+lyric list — with mastery shown via the progress engine's songProgress
+over loadSongStates (same path as the progress page, no
+reimplementation): tier badge, learned-line count, aria-labelled
+progress bar. Unknown ids get the learn page's not-found treatment;
+found songs get a primary CTA into /songs/[id]/learn with the
+progress page's "Practice <title> in Learn Mode" accessible name.
+vocab renders the persisted word list from loadWords, grouped
+learning/new/known via filterByStatus, summarized with computeProgress
+("X of Y words known (Z%)"), attributing words to their songs through
+getSongById; empty state points at the song library — words are
+user-added, there is no seed vocabulary. placeholderVocabCards is
+retired from the page (the pure function and its tests stay, to be
+removed together with the songs-library bridge). Leftovers from the
+S5 flag list: the label3 AA contrast miss and the learn-input focus
+style were fixed in 8aa772a; placeholderSongCards remains — the songs
+library page is now the only placeholder surface left in the app.
+Data-wiring pins live in src/app/pages.test.ts; the rewired pages'
+a11y contract is pinned in a11y.test.ts.
+
 Rules: tests green before every commit; pull --rebase; never force-push.

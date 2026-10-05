@@ -5,11 +5,11 @@
  * boundary in `./songs-storage`. All list operations are immutable: they
  * return new arrays and never mutate their inputs.
  *
- * The songs pages are placeholder stubs: they ship no song data of their own,
- * only generated placeholder cards (see `placeholderSongCards` at the bottom,
- * extracted verbatim from the pages). The seed catalog below is the starting
- * data for the real data layer — the learn flow and progress slices consume
- * it from here instead of page-local constants.
+ * The song detail, learn and progress pages consume the real data below
+ * (catalog queries + persisted learner state). The songs library page
+ * (`app/songs/page.tsx`) is the last placeholder surface: it still renders
+ * `placeholderSongCards` (see the bottom of this file) until the library
+ * gets its own data-wiring pass.
  */
 
 export type SongDifficulty = 'beginner' | 'intermediate' | 'advanced';
@@ -163,10 +163,10 @@ export function toggleLineIndex(indices: number[], index: number): number[] {
 // ---------------------------------------------------------------------------
 
 /**
- * Card data shape currently rendered by the songs pages. The pages are
- * placeholder stubs; later slices replace this derivation with the real
- * catalog (list/detail) and persisted song state (learn), at which point
- * this function is retired.
+ * Card data shape rendered by the songs library page. The song detail and
+ * learn pages are real now (catalog + persisted state); the library page is
+ * the last consumer of this derivation — retire it (with its tests) when the
+ * library page is wired to `listSongs`.
  */
 export interface SongCardData {
   id: string;

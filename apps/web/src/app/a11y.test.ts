@@ -9,11 +9,19 @@ import { fileURLToPath } from 'node:url';
  *     text is rendered on (4.5:1 — all uses are 12–15px normal-weight text).
  *  2. The learn-mode practice input must have a visible keyboard focus style
  *     (WCAG 2.4.7) via the `.learn-input:focus-visible` rule in globals.css.
+ *
+ * It also pins the a11y contract of the pages rewired in the final data-
+ * wiring slice (song detail + vocabulary): landmark/heading structure,
+ * specific back-link and CTA accessible names, token-only grays, and no
+ * inline outline overrides — the same contract the learn/progress pages
+ * already follow.
  */
 
 const APP_DIR = dirname(fileURLToPath(import.meta.url));
 const globalsCss = readFileSync(join(APP_DIR, 'globals.css'), 'utf8');
 const learnPage = readFileSync(join(APP_DIR, 'songs/[id]/learn/page.tsx'), 'utf8');
+const songDetailPage = readFileSync(join(APP_DIR, 'songs/[id]/page.tsx'), 'utf8');
+const vocabPage = readFileSync(join(APP_DIR, 'vocab/page.tsx'), 'utf8');
 
 function tokenValue(name: string): string {
   const match = globalsCss.match(new RegExp(`--${name}:\\s*([^;]+);`));
@@ -74,5 +82,49 @@ describe('learn input keyboard focus style', () => {
     const markup = input?.[0] ?? '';
     expect(markup).toContain('className="learn-input"');
     expect(markup, 'inline `outline` would override the .learn-input:focus-visible rule').not.toMatch(/outline\s*:/);
+  });
+});
+
+describe('rewired pages a11y contract (song detail + vocabulary)', () => {
+  // The song detail page has a found and a not-found render branch — exactly
+  // one renders at runtime, so the source carries two <main>/<h1> occurrences
+  // (one per branch). The vocabulary page has a single branch.
+  it.each([
+    ['song detail', songDetailPage, 2],
+    ['vocabulary', vocabPage, 1],
+  ])('%s page: one <main> landmark and one <h1> per render branch', (_name, source, branches) => {
+    expect(source.match(/<main\b/g)).toHaveLength(branches);
+    expect(source.match(/<h1\b/g)).toHaveLength(branches);
+  });
+
+  it.each([
+    ['song detail', songDetailPage],
+    ['vocabulary', vocabPage],
+  ])('%s back link carries a specific aria-label', (_name, source) => {
+    expect(source).toMatch(/aria-label="Back to (all songs|home)"/);
+  });
+
+  it('song detail: the learn-flow CTA and progress bar expose accessible names', () => {
+    expect(songDetailPage).toContain('aria-label={`Practice ${song.title} in Learn Mode`}');
+    expect(songDetailPage).toContain('role="progressbar"');
+    expect(songDetailPage).toContain('aria-valuetext=');
+    expect(songDetailPage).toContain('aria-label={`${song.title} progress`}');
+  });
+
+  it.each([
+    ['song detail', songDetailPage],
+    ['vocabulary', vocabPage],
+  ])('%s page keeps secondary text on the fixed --ios-label3 token (no hardcoded grays)', (_name, source) => {
+    expect(source).toContain('var(--ios-label3)');
+    expect(source, 'grays must come from design tokens, never literal hexes').not.toMatch(
+      /#(8E8E93|6D6D72|3C3C43)/i
+    );
+  });
+
+  it.each([
+    ['song detail', songDetailPage],
+    ['vocabulary', vocabPage],
+  ])('%s page sets no inline outline that would break keyboard focus visibility', (_name, source) => {
+    expect(source, 'inline `outline` would override the .learn-input:focus-visible rule').not.toMatch(/outline\s*:/);
   });
 });

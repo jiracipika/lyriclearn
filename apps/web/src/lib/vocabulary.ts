@@ -141,9 +141,11 @@ export function computeProgress(words: VocabWord[]): VocabProgress {
 // ---------------------------------------------------------------------------
 
 /**
- * Card data shape currently rendered by the vocabulary page. The page is a
- * placeholder stub; S2 (songs data layer) replaces this derivation with the
- * real persisted word list, at which point this function is retired.
+ * Card data shape of the S1 placeholder bridge. The vocabulary page now
+ * renders the real persisted word list (`loadWords` + `filterByStatus`), so
+ * no page consumes this any more. Kept — with its tests — alongside
+ * `placeholderSongCards` so the two bridges can be retired together when
+ * the songs library page is wired to the real catalog.
  */
 export interface VocabCardData {
   id: string;
