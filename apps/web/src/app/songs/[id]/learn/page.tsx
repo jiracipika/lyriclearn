@@ -162,10 +162,11 @@ export default function LearnModePage() {
               onKeyDown={(e) => { if (e.key === 'Enter') checkGuess(); }}
               placeholder="Type the line from memory…"
               aria-label="Type the current lyric line"
+              className="learn-input"
               style={{
                 width: '100%', boxSizing: 'border-box', fontSize: 16, color: 'var(--ios-label)',
                 background: 'var(--ios-bg)', border: '1px solid var(--ios-label3)', borderRadius: 12,
-                padding: '10px 14px', marginBottom: 12, outline: 'none',
+                padding: '10px 14px', marginBottom: 12,
               }}
             />
             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

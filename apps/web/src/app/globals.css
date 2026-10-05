@@ -7,7 +7,7 @@
   --ios-bg2: #FFFFFF;
   --ios-label: #000000;
   --ios-label2: #3C3C43;
-  --ios-label3: #8E8E93;
+  --ios-label3: #6D6D72; /* darkened from #8E8E93: 4.61:1 on --ios-bg, 5.15:1 on --ios-bg2 (WCAG AA 4.5:1) */
   --ios-label4: #C7C7CC;
   --ios-sep: rgba(60,60,67,0.12);
   --ios-blue: #007AFF;
@@ -24,3 +24,13 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', system-ui, sans-serif; background: var(--ios-bg); color: var(--ios-label); -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
+
+/* Learn-mode practice input: suppress the default outline, but always show a
+   visible keyboard focus indicator (WCAG 2.4.7). Inline styles must not set
+   `outline` on this element or they would override the :focus-visible rule. */
+.learn-input { outline: none; }
+.learn-input:focus-visible {
+  outline: 2px solid var(--ios-blue);
+  outline-offset: 2px;
+  border-color: var(--ios-blue);
+}
