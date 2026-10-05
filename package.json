@@ -1,10 +1,14 @@
 {
   "name": "lyriclearn",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "cd apps/web && next dev",
     "build": "cd apps/web && next build",
-    "start": "cd apps/web && next start"
+    "start": "cd apps/web && next start",
+    "test": "cd apps/web && npm test"
   }
 }
