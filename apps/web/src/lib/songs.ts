@@ -5,11 +5,9 @@
  * boundary in `./songs-storage`. All list operations are immutable: they
  * return new arrays and never mutate their inputs.
  *
- * The song detail, learn and progress pages consume the real data below
- * (catalog queries + persisted learner state). The songs library page
- * (`app/songs/page.tsx`) is the last placeholder surface: it still renders
- * `placeholderSongCards` (see the bottom of this file) until the library
- * gets its own data-wiring pass.
+ * The song detail, learn, progress and songs library pages all consume the
+ * real data below (catalog queries + persisted learner state) — there are no
+ * placeholder surfaces left in the app.
  */
 
 export type SongDifficulty = 'beginner' | 'intermediate' | 'advanced';
@@ -156,45 +154,4 @@ export function toggleLineIndex(indices: number[], index: number): number[] {
   if (!Number.isInteger(index) || index < 0) return [...indices];
   if (indices.includes(index)) return indices.filter((i) => i !== index);
   return [...indices, index].sort((a, b) => a - b);
-}
-
-// ---------------------------------------------------------------------------
-// Placeholder card data
-// ---------------------------------------------------------------------------
-
-/**
- * Card data shape rendered by the songs library page. The song detail and
- * learn pages are real now (catalog + persisted state); the library page is
- * the last consumer of this derivation — retire it (with its tests) when the
- * library page is wired to `listSongs`.
- */
-export interface SongCardData {
-  id: string;
-  title: string;
-  subtitle: string;
-  gradient: string;
-}
-
-export const SONG_PLACEHOLDER_COUNT = 6;
-
-/**
- * Deterministically derives the placeholder cards a songs page renders for
- * its feature label ('Song Library', 'Song Detail' or 'Learn Mode'). Pure:
- * same label and count in, same cards out.
- */
-export function placeholderSongCards(
-  label: string,
-  count: number = SONG_PLACEHOLDER_COUNT
-): SongCardData[] {
-  const cards: SongCardData[] = [];
-  for (let i = 1; i <= count; i++) {
-    const hue = i * 51;
-    cards.push({
-      id: `song-placeholder-${i}`,
-      title: `${label} Item ${i}`,
-      subtitle: `Added ${i}d ago`,
-      gradient: `linear-gradient(135deg, hsl(${hue}, 40%, 85%) 0%, hsl(${hue + 30}, 45%, 80%) 100%)`,
-    });
-  }
-  return cards;
 }

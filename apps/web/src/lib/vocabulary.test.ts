@@ -4,7 +4,6 @@ import {
   computeProgress,
   createWord,
   filterByStatus,
-  placeholderVocabCards,
   removeWord,
   searchWords,
   setWordStatus,
@@ -163,29 +162,5 @@ describe('computeProgress', () => {
       newCount: 0,
       knownPercent: 0,
     });
-  });
-});
-
-describe('placeholderVocabCards', () => {
-  it('derives the exact placeholder cards the vocab page renders', () => {
-    const cards = placeholderVocabCards();
-    expect(cards).toHaveLength(6);
-    expect(cards[0]).toEqual({
-      id: 'vocab-placeholder-1',
-      title: 'Vocabulary Item 1',
-      subtitle: 'Added 1d ago',
-      gradient: 'linear-gradient(135deg, hsl(51, 40%, 85%) 0%, hsl(81, 45%, 80%) 100%)',
-    });
-    expect(cards[2].title).toBe('Vocabulary Item 3');
-    expect(cards[2].subtitle).toBe('Added 3d ago');
-    expect(cards[2].gradient).toBe(
-      'linear-gradient(135deg, hsl(153, 40%, 85%) 0%, hsl(183, 45%, 80%) 100%)'
-    );
-  });
-
-  it('is deterministic and honours an explicit count', () => {
-    expect(placeholderVocabCards()).toEqual(placeholderVocabCards());
-    expect(placeholderVocabCards(0)).toEqual([]);
-    expect(placeholderVocabCards(2)).toHaveLength(2);
   });
 });

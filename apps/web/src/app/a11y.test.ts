@@ -11,10 +11,10 @@ import { fileURLToPath } from 'node:url';
  *     (WCAG 2.4.7) via the `.learn-input:focus-visible` rule in globals.css.
  *
  * It also pins the a11y contract of the pages rewired in the final data-
- * wiring slice (song detail + vocabulary): landmark/heading structure,
- * specific back-link and CTA accessible names, token-only grays, and no
- * inline outline overrides — the same contract the learn/progress pages
- * already follow.
+ * wiring slice (song detail + vocabulary + songs library): landmark/heading
+ * structure, specific back-link and CTA accessible names, token-only grays,
+ * and no inline outline overrides — the same contract the learn/progress
+ * pages already follow.
  */
 
 const APP_DIR = dirname(fileURLToPath(import.meta.url));
@@ -22,6 +22,7 @@ const globalsCss = readFileSync(join(APP_DIR, 'globals.css'), 'utf8');
 const learnPage = readFileSync(join(APP_DIR, 'songs/[id]/learn/page.tsx'), 'utf8');
 const songDetailPage = readFileSync(join(APP_DIR, 'songs/[id]/page.tsx'), 'utf8');
 const vocabPage = readFileSync(join(APP_DIR, 'vocab/page.tsx'), 'utf8');
+const songLibraryPage = readFileSync(join(APP_DIR, 'songs/page.tsx'), 'utf8');
 
 function tokenValue(name: string): string {
   const match = globalsCss.match(new RegExp(`--${name}:\\s*([^;]+);`));
@@ -85,13 +86,15 @@ describe('learn input keyboard focus style', () => {
   });
 });
 
-describe('rewired pages a11y contract (song detail + vocabulary)', () => {
+describe('rewired pages a11y contract (song detail + vocabulary + songs library)', () => {
   // The song detail page has a found and a not-found render branch — exactly
   // one renders at runtime, so the source carries two <main>/<h1> occurrences
-  // (one per branch). The vocabulary page has a single branch.
+  // (one per branch). The vocabulary and songs library pages keep a single
+  // <main>/<h1> and swap only the content below it.
   it.each([
     ['song detail', songDetailPage, 2],
     ['vocabulary', vocabPage, 1],
+    ['songs library', songLibraryPage, 1],
   ])('%s page: one <main> landmark and one <h1> per render branch', (_name, source, branches) => {
     expect(source.match(/<main\b/g)).toHaveLength(branches);
     expect(source.match(/<h1\b/g)).toHaveLength(branches);
@@ -100,6 +103,7 @@ describe('rewired pages a11y contract (song detail + vocabulary)', () => {
   it.each([
     ['song detail', songDetailPage],
     ['vocabulary', vocabPage],
+    ['songs library', songLibraryPage],
   ])('%s back link carries a specific aria-label', (_name, source) => {
     expect(source).toMatch(/aria-label="Back to (all songs|home)"/);
   });
@@ -114,6 +118,7 @@ describe('rewired pages a11y contract (song detail + vocabulary)', () => {
   it.each([
     ['song detail', songDetailPage],
     ['vocabulary', vocabPage],
+    ['songs library', songLibraryPage],
   ])('%s page keeps secondary text on the fixed --ios-label3 token (no hardcoded grays)', (_name, source) => {
     expect(source).toContain('var(--ios-label3)');
     expect(source, 'grays must come from design tokens, never literal hexes').not.toMatch(
@@ -124,6 +129,7 @@ describe('rewired pages a11y contract (song detail + vocabulary)', () => {
   it.each([
     ['song detail', songDetailPage],
     ['vocabulary', vocabPage],
+    ['songs library', songLibraryPage],
   ])('%s page sets no inline outline that would break keyboard focus visibility', (_name, source) => {
     expect(source, 'inline `outline` would override the .learn-input:focus-visible rule').not.toMatch(/outline\s*:/);
   });

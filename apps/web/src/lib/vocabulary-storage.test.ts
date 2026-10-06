@@ -56,4 +56,27 @@ describe('loadWords / saveWords with injected storage', () => {
   it('saveWords is a safe no-op when no storage is available', () => {
     expect(() => saveWords(sample, null)).not.toThrow();
   });
+
+  // The repo's known localStorage duality: runtimes expose storage either as
+  // `window.localStorage` or as a bare `globalThis.localStorage`. Stub BOTH
+  // forms pointing at the same backing store, then verify the page-level
+  // write path end to end: saveWords with no injected storage persists, and a
+  // fresh loadWords call (a "reload") reads the same list back.
+  it('saveWords persists through the global fallback and loadWords survives a reload', () => {
+    const storage = makeStorage();
+    const globalRef = globalThis as { window?: unknown; localStorage?: unknown };
+    const previousWindow = globalRef.window;
+    const previousLocalStorage = globalRef.localStorage;
+    try {
+      globalRef.window = { localStorage: storage };
+      globalRef.localStorage = storage;
+
+      saveWords(sample);
+      expect(storage.dump()[VOCAB_STORAGE_KEY]).toBeDefined();
+      expect(loadWords()).toEqual(sample);
+    } finally {
+      globalRef.window = previousWindow;
+      globalRef.localStorage = previousLocalStorage;
+    }
+  });
 });

@@ -5,10 +5,11 @@ import { getSongById } from '@/lib/songs';
 import {
   computeProgress,
   filterByStatus,
+  toggleKnown,
   type VocabWord,
   type WordStatus,
 } from '@/lib/vocabulary';
-import { loadWords } from '@/lib/vocabulary-storage';
+import { loadWords, saveWords } from '@/lib/vocabulary-storage';
 
 /** Status groups in review order: words being learned first, known words last. */
 const STATUS_GROUPS: Array<{ status: WordStatus; heading: string }> = [
@@ -17,24 +18,42 @@ const STATUS_GROUPS: Array<{ status: WordStatus; heading: string }> = [
   { status: 'known', heading: 'Known' },
 ];
 
-function WordRow({ word }: { word: VocabWord }) {
+function WordRow({ word, onToggleKnown }: { word: VocabWord; onToggleKnown: (id: string) => void }) {
   const song = word.songId !== undefined ? getSongById(word.songId) : undefined;
+  const known = word.status === 'known';
   return (
     <div style={{
       borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
       padding: 14, marginBottom: 10,
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12,
     }}>
-      <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ios-label)' }}>
-        {word.term}
+      <div>
+        <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ios-label)' }}>
+          {word.term}
+        </div>
+        <div style={{ fontSize: 14, color: 'var(--ios-label2)', marginTop: 2 }}>
+          {word.translation}
+        </div>
+        {song && (
+          <Link href={`/songs/${song.id}`} style={{ fontSize: 12, color: 'var(--ios-blue)', marginTop: 6, display: 'inline-block' }}>
+            from {song.title}
+          </Link>
+        )}
       </div>
-      <div style={{ fontSize: 14, color: 'var(--ios-label2)', marginTop: 2 }}>
-        {word.translation}
-      </div>
-      {song && (
-        <Link href={`/songs/${song.id}`} style={{ fontSize: 12, color: 'var(--ios-blue)', marginTop: 6, display: 'inline-block' }}>
-          from {song.title}
-        </Link>
-      )}
+      <button
+        onClick={() => onToggleKnown(word.id)}
+        aria-pressed={known}
+        aria-label={`Toggle ${word.term} as known`}
+        style={{
+          flexShrink: 0,
+          background: known ? 'var(--ios-green)' : 'transparent',
+          color: known ? '#fff' : 'var(--ios-blue)',
+          border: `1px solid ${known ? 'var(--ios-green)' : 'var(--ios-blue)'}`,
+          borderRadius: 12, padding: '8px 16px', fontSize: 15, fontWeight: 600, cursor: 'pointer',
+        }}
+      >
+        {known ? 'Known' : 'Mark Known'}
+      </button>
     </div>
   );
 }
@@ -49,6 +68,13 @@ export default function VocabularyPage() {
   }, []);
 
   const progress = computeProgress(words);
+
+  /** Flip a word's known status and persist the whole list (same read-modify-save as the learn page). */
+  const handleToggleKnown = (id: string) => {
+    const next = toggleKnown(words, id);
+    setWords(next);
+    saveWords(next);
+  };
 
   return (
     <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
@@ -92,7 +118,7 @@ export default function VocabularyPage() {
                     {heading} <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--ios-label3)' }}>({group.length})</span>
                   </h2>
                   {group.map((word) => (
-                    <WordRow key={word.id} word={word} />
+                    <WordRow key={word.id} word={word} onToggleKnown={handleToggleKnown} />
                   ))}
                 </section>
               );

@@ -5,7 +5,6 @@ import {
   filterByLanguage,
   getSongById,
   listSongs,
-  placeholderSongCards,
   searchSongs,
   toggleLineIndex,
   type SongDifficulty,
@@ -89,30 +88,5 @@ describe('song learner state', () => {
     expect(toggleLineIndex(indices, -1)).toEqual([1, 3]);
     expect(toggleLineIndex(indices, 1.5)).toEqual([1, 3]);
     expect(indices).toEqual([1, 3]);
-  });
-});
-
-describe('placeholderSongCards', () => {
-  it('derives the exact placeholder cards the song library page renders', () => {
-    const cards = placeholderSongCards('Song Library');
-    expect(cards).toHaveLength(6);
-    expect(cards[0]).toEqual({
-      id: 'song-placeholder-1',
-      title: 'Song Library Item 1',
-      subtitle: 'Added 1d ago',
-      gradient: 'linear-gradient(135deg, hsl(51, 40%, 85%) 0%, hsl(81, 45%, 80%) 100%)',
-    });
-    expect(cards[5].title).toBe('Song Library Item 6');
-    expect(cards[5].gradient).toBe(
-      'linear-gradient(135deg, hsl(306, 40%, 85%) 0%, hsl(336, 45%, 80%) 100%)'
-    );
-  });
-
-  it('titles follow the page label and honours an explicit count', () => {
-    expect(placeholderSongCards('Learn Mode')[0].title).toBe('Learn Mode Item 1');
-    expect(placeholderSongCards('Song Detail')[3].title).toBe('Song Detail Item 4');
-    expect(placeholderSongCards('Song Library')).toEqual(placeholderSongCards('Song Library'));
-    expect(placeholderSongCards('Song Library', 0)).toEqual([]);
-    expect(placeholderSongCards('Song Library', 2)).toHaveLength(2);
   });
 });
