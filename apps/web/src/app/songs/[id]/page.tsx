@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { motion, MotionConfig } from 'motion/react';
 import { getSongById, type SongDifficulty, type SongState } from '@/lib/songs';
 import { loadSongStates } from '@/lib/songs-storage';
 import { songProgress, type MasteryTier } from '@/lib/progress';
@@ -52,60 +53,72 @@ export default function SongDetailPage() {
   const tier = TIER_STYLE[progress.tier];
 
   return (
-    <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
-      <div style={{ maxWidth: 680, margin: '0 auto', padding: '60px 16px 40px' }}>
-        <Link href="/songs" aria-label="Back to all songs" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← All Songs</Link>
-        <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--ios-label)', marginBottom: 4 }}>{song.title}</h1>
-        <p style={{ fontSize: 15, color: 'var(--ios-label3)', marginBottom: 20 }}>
-          {song.artist} · {song.language.toUpperCase()}
-          {song.difficulty !== undefined ? ` · ${DIFFICULTY_LABEL[song.difficulty]}` : ''}
-        </p>
+    <MotionConfig reducedMotion="user">
+      <main style={{ background: 'var(--ios-bg)', minHeight: '100vh' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', padding: '60px 16px 40px' }}>
+          <Link href="/songs" aria-label="Back to all songs" style={{ fontSize: 14, color: 'var(--ios-blue)', marginBottom: 16, display: 'inline-block' }}>← All Songs</Link>
+          <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px', color: 'var(--ios-label)', marginBottom: 4 }}>{song.title}</h1>
+          <p style={{ fontSize: 15, color: 'var(--ios-label3)', marginBottom: 20 }}>
+            {song.artist} · {song.language.toUpperCase()}
+            {song.difficulty !== undefined ? ` · ${DIFFICULTY_LABEL[song.difficulty]}` : ''}
+          </p>
 
-        {loaded && (
-          <div style={{
-            borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
-            padding: 16, marginBottom: 16,
+          {loaded && (
+            <div style={{
+              borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
+              padding: 16, marginBottom: 16,
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: tier.color }}>{tier.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--ios-label3)' }}>
+                  {progress.learnedLines} of {progress.totalLines} lines mastered
+                </span>
+              </div>
+              <div
+                role="progressbar"
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-valuenow={progress.pct}
+                aria-valuetext={`${progress.pct}% — ${tier.label}`}
+                aria-label={`${song.title} progress`}
+                style={{ height: 6, borderRadius: 3, background: 'var(--ios-fill)', overflow: 'hidden' }}
+              >
+                <div style={{ width: `${progress.pct}%`, height: '100%', borderRadius: 3, background: tier.color }} />
+              </div>
+            </div>
+          )}
+
+          <Link href={`/songs/${song.id}/learn`} aria-label={`Practice ${song.title} in Learn Mode`} style={{
+            display: 'inline-block', background: 'var(--ios-blue)', color: '#fff',
+            borderRadius: 12, padding: '10px 20px', fontSize: 15, fontWeight: 600,
+            marginBottom: 28,
           }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-              <span style={{ fontSize: 12, fontWeight: 600, color: tier.color }}>{tier.label}</span>
-              <span style={{ fontSize: 12, color: 'var(--ios-label3)' }}>
-                {progress.learnedLines} of {progress.totalLines} lines mastered
-              </span>
-            </div>
-            <div
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={progress.pct}
-              aria-valuetext={`${progress.pct}% — ${tier.label}`}
-              aria-label={`${song.title} progress`}
-              style={{ height: 6, borderRadius: 3, background: 'var(--ios-fill)', overflow: 'hidden' }}
-            >
-              <div style={{ width: `${progress.pct}%`, height: '100%', borderRadius: 3, background: tier.color }} />
-            </div>
-          </div>
-        )}
+            Practice This Song
+          </Link>
 
-        <Link href={`/songs/${song.id}/learn`} aria-label={`Practice ${song.title} in Learn Mode`} style={{
-          display: 'inline-block', background: 'var(--ios-blue)', color: '#fff',
-          borderRadius: 12, padding: '10px 20px', fontSize: 15, fontWeight: 600,
-          marginBottom: 28,
-        }}>
-          Practice This Song
-        </Link>
-
-        <h2 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--ios-label)', marginBottom: 12 }}>Lyrics</h2>
-        <ol aria-label={`Lyrics for ${song.title}`} style={{
-          borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
-          padding: '20px 20px 20px 40px', margin: 0,
-        }}>
-          {song.lyrics.map((line, index) => (
-            <li key={index} style={{ fontSize: 15, color: 'var(--ios-label)', lineHeight: 1.6, marginBottom: 6 }}>
-              {line}
-            </li>
-          ))}
-        </ol>
-      </div>
-    </main>
+          <h2 style={{ fontSize: 18, fontWeight: 700, letterSpacing: '-0.3px', color: 'var(--ios-label)', marginBottom: 12 }}>Lyrics</h2>
+          <ol aria-label={`Lyrics for ${song.title}`} style={{
+            borderRadius: 16, background: 'var(--ios-bg2)', boxShadow: 'var(--ios-shadow)',
+            padding: '20px 20px 20px 40px', margin: 0,
+          }}>
+            {song.lyrics.map((line, index) => (
+              <motion.li
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  type: 'spring', bounce: 0.25, duration: 0.45,
+                  // Cap the cascade so long songs still reveal quickly.
+                  delay: Math.min(index * 0.04, 0.4),
+                }}
+                style={{ fontSize: 15, color: 'var(--ios-label)', lineHeight: 1.6, marginBottom: 6 }}
+              >
+                {line}
+              </motion.li>
+            ))}
+          </ol>
+        </div>
+      </main>
+    </MotionConfig>
   );
 }
